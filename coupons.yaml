@@ -71,6 +71,56 @@ paths:
         - coupons_auth:
           - write_coupons
           - read_coupons
+          
+  /coupons/{code}/validations:
+    post:
+      tags:
+        - coupon
+        - validation
+      summary: Attempt to validate a coupon and get the discount that it grants.
+      description: This does not consume the coupon.
+      operationId: validateCoupon
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: code
+          description: the coupon code
+          required: true
+          type: string
+      responses:
+        "201":
+          schema:
+            $ref: "#/definitions/ValidationResult"
+          description: The coupon is valid and grants a discount
+        "204":
+          description: The coupon exists, but does not grant a discount
+        "404":
+          description: Coupon not found
+          
+  /coupons/{code}/redemptions:
+    post:
+      tags:
+        - coupon
+        - redemption
+      summary: Attempt to redeem a coupon.
+      description: This consumes one use of the coupon.
+      operationId: redeemCoupon
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: code
+          description: the coupon code
+          required: true
+          type: string
+      responses:
+        "201":
+          description: The coupon is valid and grants a discount
+        "404":
+          description: Coupon not found
+
+
 securityDefinitions:
   api_key:
     type: apiKey
@@ -83,7 +133,9 @@ securityDefinitions:
     scopes:
       write_coupons: modify coupons
       read_coupons: read coupons
+      
 definitions:
+
   Coupon:
     type: object
     properties:
@@ -100,3 +152,14 @@ definitions:
         type: string
       discount:
         type: integer
+        
+  ValidationResult:
+    type: object
+    required:
+      - discount
+    properties:
+      discount:
+        type: integer
+        format: int32
+        description: The discount granted by the coupon, as a percent. For example, 45 would be 45%
+        example: 15
