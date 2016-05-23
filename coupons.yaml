@@ -71,6 +71,81 @@ paths:
         - coupons_auth:
           - write_coupons
           - read_coupons
+    get:
+      tags:
+        - coupon
+      summary: Finds coupons
+      description: Returns all coupons.
+      operationId: getAllCoupons
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Coupon"
+      security:
+        - coupons_auth:
+          - write_coupons
+          - read_coupons
+
+  /coupons/{code}:
+    get:
+      tags:
+        - coupon
+      summary: Find coupon by code
+      description: Returns a coupon with CODE = code
+      operationId: getCouponByCode
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: code
+          description: Code of coupon that needs to be fetched
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Coupon not found
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Coupon"
+        "400":
+          description: Invalid coupon supplied
+      security:
+        - api_key: []
+        - coupons_auth:
+          - write_coupons
+          - read_coupons
+    delete:
+      tags:
+        - coupon
+      summary: Deletes a coupon
+      description: ""
+      operationId: deleteCoupon
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api_key
+          description: ""
+          required: true
+          type: string
+        - in: path
+          name: code
+          description: Code to delete
+          required: true
+          type: string
+      responses:
+        "400":
+          description: Invalid coupon code value
+      security:
+        - coupons_auth:
+          - write_coupons
+          - read_coupons
           
   /coupons/{code}/validations:
     post:
