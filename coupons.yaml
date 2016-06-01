@@ -86,10 +86,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Coupon"
-      security:
-        - coupons_auth:
-          - write_coupons
-          - read_coupons
 
   /coupons/{code}:
     get:
