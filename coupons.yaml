@@ -39,10 +39,7 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - coupons_auth:
-          - write_coupons
-          - read_coupons
+
     put:
       tags:
         - coupon
@@ -67,10 +64,7 @@ paths:
           description: Coupon not found
         "400":
           description: Invalid CODE supplied
-      security:
-        - coupons_auth:
-          - write_coupons
-          - read_coupons
+
     get:
       tags:
         - coupon
@@ -111,11 +105,7 @@ paths:
             $ref: "#/definitions/Coupon"
         "400":
           description: Invalid coupon supplied
-      security:
-        - api_key: []
-        - coupons_auth:
-          - write_coupons
-          - read_coupons
+
     delete:
       tags:
         - coupon
@@ -138,10 +128,6 @@ paths:
       responses:
         "400":
           description: Invalid coupon code value
-      security:
-        - coupons_auth:
-          - write_coupons
-          - read_coupons
           
   /coupons/{code}/validations:
     post:
